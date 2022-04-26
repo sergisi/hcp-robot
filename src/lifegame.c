@@ -164,14 +164,14 @@ int *life_init(char *filename, double prob, int m, int n, int *seed)
         life_read(filename, m, n, grid);
     } else {
 
-#pragma omp parallel for shared(grid) private(i, j) num_threads(cores) schedule(static)
+#pragma omp parallel for shared(grid) private(i, j) num_threads(cores) schedule(guided)
         for (j = 0; j <= n + 1; j++) {
             for (i = 0; i <= m + 1; i++) {
                 grid[i + j * (m + 2)] = 0;
             }
         }
 
-#pragma omp parallel for shared(grid) private(i, j) num_threads(cores) schedule(static)
+#pragma omp parallel for shared(grid) private(i, j) num_threads(cores) schedule(guided)
         for (j = 1; j <= n; j++) {
             for (i = 1; i <= m; i++) {
                 r = r8_uniform_01(seed);
@@ -221,7 +221,7 @@ void life_update(int m, int n, int grid[])
 
     s = (int *) malloc(m * n * sizeof(int));
 
-#pragma omp parallel for shared(s) private(i, j) num_threads(cores) schedule(static)
+#pragma omp parallel for shared(s) private(i, j) num_threads(cores) schedule(guided)
     for (j = 1; j <= n; j++) {
         for (i = 1; i <= m; i++) {
             compute_life_or_dead(m, n, grid, i, j, s);
@@ -231,7 +231,7 @@ void life_update(int m, int n, int grid[])
   Any dead cell with 3 live neighbors becomes alive.
   Any living cell with less than 2 or more than 3 neighbors dies.
 */
-#pragma omp parallel for shared(grid) private(i, j) num_threads(cores) schedule(static)
+#pragma omp parallel for shared(grid) private(i, j) num_threads(cores) schedule(guided)
     for (j = 1; j <= n; j++) {
         for (i = 1; i <= m; i++) {
             if (grid[i + j * (m + 2)] == 0) {
@@ -358,13 +358,13 @@ void life_read(char *filename, int m, int n, int grid[])
         }
     }
     /* Set the grid borderline to 0's */
-#pragma omp parallel for num_threads(cores) schedule(static)
+#pragma omp parallel for num_threads(cores) schedule(guided)
     for (j = 0; j <= n + 1; j++) {
         grid[0 + j * (m + 2)] = 0;
         grid[(m + 1) + j * (m + 2)] = 0;
 
     }
-#pragma omp parallel for num_threads(cores) schedule(static)
+#pragma omp parallel for num_threads(cores) schedule(guided)
     for (i = 1; i <= m; i++) {
         grid[i + 0 * (m + 2)] = 0;
         grid[i + (n + 1) * (m + 2)] = 0;
