@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
     }
 
     run_time = omp_get_wtime() - start_time;
-    printf("GoL MxN (%d x %d), time=%f \n", m, n, run_time);
+    printf("GoL MxN (%d x %d), time=%f iters=%d cores=%d\n", m, n, run_time, it_max, cores);
 
     sprintf(output_filename, DDefaultOutputFilename, it - 1);
     life_write(output_filename, m, n, grid);
