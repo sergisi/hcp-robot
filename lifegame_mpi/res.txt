@@ -1,0 +1,15 @@
+28 May 2022 06:03:13 PM
+
+LIFE GAME SERIAL
+  C version
+  Carry out a few steps of John Conway's
+  Game of Life.
+  Parameters: lifegame [input-file] [x] [y] [iters] .
+
+Reading Input filename examples/10x10/LifeGameInit_10x10_iter0.txt
+GoL MxN (10 x 10), time=0.000501 iters=100 openmp-cores=1 mpi-cores=3
+
+LIFE GAME SERIAL
+  Normal end of execution.
+
+28 May 2022 06:03:13 PM
