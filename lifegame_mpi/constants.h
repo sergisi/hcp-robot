@@ -7,7 +7,7 @@
 
 const int debug = 0 != 0;
 const int DNumIterForPartialResults = 25;
-const int cores = 1;
+int cores;
 const char *DDefaultOutputFilename = "./Life_%04d.txt";
 
 enum {
@@ -17,7 +17,9 @@ enum {
     tag_n = 3,
     tag_m = 4,
     tag_it_max = 5,
-    tag_initial_grid = 6
+    tag_initial_grid = 6,
+    tag_cores = 7
+
 };
 
 #include <stdio.h>

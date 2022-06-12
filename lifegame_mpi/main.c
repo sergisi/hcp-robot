@@ -15,32 +15,33 @@
 
 int main(int argc, char *argv[]);
 
-void life_write(char *output_filename, int m, int n, int grid[]);
+void life_write(char *output_filename, int m, int n, int8_t grid[]);
 
 void
-print_result(char *output_filename, int it, int it_max, int m, int n, int *grid, double start_time, double run_time,
+print_result(char *output_filename, int it, int it_max, int m, int n, int8_t *grid, double start_time, double run_time,
              int nproc);
 
-int *save_file(char *output_filename, int it, int it_max, int m, int n, int **grid, double start_time, double run_time,
+int8_t *save_file(char *output_filename, int it, int it_max, int m, int n, int8_t **grid, double start_time, double run_time,
                int nproc, int iproc, int size_to_work);
 
 int main(int argc, char *argv[]) {
     char *filename = NULL, output_filename[100];
-    int it;
+    int it = 0;
     int it_max = 10;
     int m = 10;
     int n = 10;
-    int *grid;
+    int8_t *grid;
     double prob = 0.20;
     int seed = 123456789;
-    double start_time, run_time;
+    double start_time = 0, run_time = 0;
     // variables needed for MPI
-    int nproc, iproc, size_to_work, iproc_prev, iproc_next;
+    int nproc, iproc, size_to_work = 0, iproc_prev, iproc_next;
 
     MPI_Request requests[4];
     mpi_read_initial_file(argc, argv, filename, prob, &seed, &it_max, &m, &n, &grid, &start_time, &nproc, &iproc,
                           &size_to_work, &iproc_prev, &iproc_next);
 
+    printf("[%d]: %d cores\n", iproc, cores);
     it = mpi_life_update(it, it_max, m, grid, iproc, size_to_work, iproc_prev, iproc_next, requests);
 
     grid = save_file(output_filename, it, it_max, m, n, &grid, start_time, run_time, nproc, iproc, size_to_work);
@@ -51,7 +52,7 @@ int main(int argc, char *argv[]) {
 
 }
 
-int *save_file(char *output_filename, int it, int it_max, int m, int n, int **grid, double start_time, double run_time,
+int8_t *save_file(char *output_filename, int it, int it_max, int m, int n, int8_t **grid, double start_time, double run_time,
                int nproc, int iproc, int size_to_work) {
     if (iproc == 0) {
         recieve_ended_grids(m, n, grid, nproc);
@@ -59,13 +60,13 @@ int *save_file(char *output_filename, int it, int it_max, int m, int n, int **gr
         print_result(output_filename, it, it_max, m, n, (*grid), start_time, run_time, nproc);
     } else {
         debug_grid(m, *grid, size_to_work, iproc, it_max * 2);
-        MPI_Send((*grid) + m + 2, size_to_work * (m + 2), MPI_INT, 0, 0, MPI_COMM_WORLD);
+        MPI_Send((*grid) + m + 2, size_to_work * (m + 2), MPI_INT8_T, 0, 0, MPI_COMM_WORLD);
     }
     return (*grid);
 }
 
 void
-print_result(char *output_filename, int it, int it_max, int m, int n, int *grid, double start_time, double run_time,
+print_result(char *output_filename, int it, int it_max, int m, int n, int8_t *grid, double start_time, double run_time,
              int nproc) {
     run_time = MPI_Wtime() - start_time;
     printf("GoL MxN (%d x %d), time=%f iters=%d openmp-cores=%d mpi-cores=%d\n", m, n, run_time, it_max, cores, nproc);
@@ -85,7 +86,7 @@ print_result(char *output_filename, int it, int it_max, int m, int n, int *grid,
 
 /******************************************************************************/
 
-void life_write(char *output_filename, int m, int n, int grid[])
+void life_write(char *output_filename, int m, int n, int8_t grid[])
 
 /******************************************************************************/
 /*
@@ -112,7 +113,7 @@ void life_write(char *output_filename, int m, int n, int grid[])
     Input, int M, N, the number of rows and columns
     of interior grid cells.
 
-    Input, int GRID[(1+M+1)*(1+N+1)], the data.
+    Input, int8_t GRID[(1+M+1)*(1+N+1)], the data.
 */
 {
     int i;

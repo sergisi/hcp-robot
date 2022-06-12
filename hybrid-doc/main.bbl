@@ -1,0 +1,16 @@
+\begin{thebibliography}{1}
+
+\bibitem{openmp}
+\textit{Rolf Rabenseifner, Georg Hager, Gabriele Jost}.
+\newblock \textbf{Hybrid MPI and OpenMP Parallel Programming}.
+\newblock \url{https://openmp.org/wp-content/uploads/HybridPP_Slides.pdf}, sl.
+  8.
+
+\bibitem{article}
+\textit{Torsten Hoefler, James Dinan, Darius Buntinas, Pavan Balaji, Brian
+  Barrett, Ron Brightwell, William Gropp, Vivek Kale, Rajeev Thakur}.
+\newblock \textbf{MPI + MPI: a new hybrid approach to parallel programming with
+  MPI plus shared memory}.
+\newblock \url{https://rd.springer.com/article/10.1007/s00607-013-0324-2}.
+
+\end{thebibliography}

@@ -1,4 +1,4 @@
-28 May 2022 06:03:13 PM
+07 June 2022 05:34:24 PM
 
 LIFE GAME SERIAL
   C version
@@ -7,9 +7,9 @@ LIFE GAME SERIAL
   Parameters: lifegame [input-file] [x] [y] [iters] .
 
 Reading Input filename examples/10x10/LifeGameInit_10x10_iter0.txt
-GoL MxN (10 x 10), time=0.000501 iters=100 openmp-cores=1 mpi-cores=3
+GoL MxN (10 x 10), time=0.000428 iters=100 openmp-cores=2 mpi-cores=2
 
 LIFE GAME SERIAL
   Normal end of execution.
 
-28 May 2022 06:03:13 PM
+07 June 2022 05:34:25 PM

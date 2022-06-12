@@ -19,13 +19,15 @@
 #include <stdlib.h>
 #include "mpi_utilities.h"
 
-void recieve_ended_grids(int m, int n, int **grid, int nproc);
+void recieve_ended_grids(int m, int n, int8_t **grid, int nproc);
 
 int get_start_n(int n, int nproc, int iproc);
 
 int mpi_recv_int(int *it_max, int tag);
 
-void recieve_ended_grids(int m, int n, int **grid, int nproc) {
+int get_size_to_work(int n, int nproc, int iproc);
+
+void recieve_ended_grids(int m, int n, int8_t **grid, int nproc) {
     MPI_Request requests[nproc - 1];
     for (int i = 1; i < nproc; i++) {
         int startn = get_start_n(n, nproc, i);
@@ -33,7 +35,7 @@ void recieve_ended_grids(int m, int n, int **grid, int nproc) {
         char msg[200] = {0};
         snprintf(msg, 199, "[0] -> [%d]: Receiving from %d with a total of %d elements", i, startn, size_to_work);
         guardian(msg);
-        MPI_Irecv(*grid + (startn + 1) * (m + 2), size_to_work * (m + 2), MPI_INT, i, 0, MPI_COMM_WORLD, &requests[i - 1]);
+        MPI_Irecv(*grid + (startn + 1) * (m + 2), size_to_work * (m + 2), MPI_INT8_T, i, 0, MPI_COMM_WORLD, &requests[i - 1]);
     }
     MPI_Waitall(nproc - 1, requests, MPI_STATUSES_IGNORE);
 }
@@ -56,8 +58,8 @@ int get_guarded_int(int *it_max, int iproc, const char *var_name, int tag) {
     return (*it_max);
 }
 
-int send_grid(int m, int n, const int *grid, int nproc) {
-    int startn, size_to_work;
+int send_grid(int m, int n, const int8_t *grid, int nproc) {
+    int startn, size_to_work = 0;
     MPI_Request requests[nproc - 1];
     for (int i = 1; i < nproc; i++) {
         size_to_work = get_size_to_work(n, nproc, i);
@@ -65,7 +67,7 @@ int send_grid(int m, int n, const int *grid, int nproc) {
         char msg[200];
         sprintf(msg, "[0]: Sending grid of: %i x %i", size_to_work, m);
         guardian(msg);
-        MPI_Isend(grid + (startn + 1) * (m + 2), size_to_work * (m + 2), MPI_INT, i, tag_initial_grid, MPI_COMM_WORLD, &requests[i - 1]);
+        MPI_Isend(grid + (startn + 1) * (m + 2), size_to_work * (m + 2), MPI_INT8_T, i, tag_initial_grid, MPI_COMM_WORLD, &requests[i - 1]);
     }
     guardian("[0]: Sended all grids");
     MPI_Waitall(nproc - 1, requests, MPI_STATUSES_IGNORE);

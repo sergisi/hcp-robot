@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include "constants.h"
 
-void debug_grid(int m, const int *grid, int size_to_work, int iproc, int it);
+void debug_grid(int m, const int8_t *grid, int size_to_work, int iproc, int it);
 
 void debug_end(int iproc);
 
@@ -20,7 +20,7 @@ void guardian(const char *msg);
 
 void guardia_iproc(int iproc, char mmsg[]);
 
-void debug_grid(int m, const int *grid, int size_to_work, int iproc, int it) {
+void debug_grid(int m, const int8_t *grid, int size_to_work, int iproc, int it) {
     if (debug && m < 50) {
         for (int i = 0; i < size_to_work + 2; i++) {
             printf("[%d, %d, %d]\t", iproc, it, i);
